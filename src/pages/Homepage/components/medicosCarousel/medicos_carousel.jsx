@@ -24,6 +24,7 @@ const data = [
             >
               {data.map((result, i) => (
                 <Card
+                key={i}
                   img={result.img}
                   name={result.name}
                   local={result.local}

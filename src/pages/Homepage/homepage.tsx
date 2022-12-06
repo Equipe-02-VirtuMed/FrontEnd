@@ -6,6 +6,7 @@ import { Navigate } from "react-router-dom";
 import { colors } from "../../styles/colors";
 import Carousel from "react-elastic-carousel";
 import MedicosCarousel from "./components/medicosCarousel/medicos_carousel";
+import CategoriasCarousel from "./components/categoriasCarousel/categorias_carousel";
 
 const transition = {
   hidden: { opacity: 0 },
@@ -39,6 +40,13 @@ const Homepage = () => {
               </SeeMore>
             </TopicContainer>
             <MedicosCarousel />
+            <TopicContainer>
+              <TextIntro style={{ fontWeight: 700 }}>Categorias</TextIntro>
+              <SeeMore>
+                <TopicText>ver mais</TopicText>
+              </SeeMore>
+            </TopicContainer>
+            <CategoriasCarousel/>
           </Container>
         </motion.div>
       </>
