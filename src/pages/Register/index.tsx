@@ -30,10 +30,10 @@ const Register = () => {
           </LogoContainer>
           <TextImg>
             <TitleContainer>
-              <Text>Login </Text>
+              <Text>Register</Text>
             </TitleContainer>
             <Description>
-              Não tem uma conta ? <Strong>Criar conta</Strong>
+              Já possui uma conta ? <Strong>Entrar</Strong>
             </Description>
           </TextImg>
 
@@ -54,11 +54,10 @@ const Register = () => {
                 autoComplete="off"
               />
             </InputContainer>
-            <ForgetPassword>Esqueceu a senha ?</ForgetPassword>
-            <EnterBtn>Entrar</EnterBtn>
+            <EnterBtn>Criar conta</EnterBtn>
           </InputGrid>
           <SocialContainer>
-            Ou entre com
+            Ou criar com
             <SocialSubContainer>
               <SocialIcons src={facebook} />
               <SocialIcons src={gmail} />

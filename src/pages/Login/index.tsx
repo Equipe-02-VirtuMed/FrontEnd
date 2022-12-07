@@ -7,14 +7,71 @@ import apple from "../../assets/apple.svg";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { colors } from "../../styles/colors";
-import Link, { useState } from "react";
+import Link, { useState ,useRef} from "react";
 import Image from "react";
+import { useNavigate } from "react-router-dom";
+import { QueryClient, QueryClientProvider, useMutation } from "@tanstack/react-query";
+import { AuthService } from "../../services/AuthServices";
+import { LoginResponse } from "../../types/api-types/login";
+import { ErrorResponse } from "../../types/api-types/error";
+import { LocalStorageHelper } from "../../helpers/LocalStorageHelper";
+import { LocalStorageKeys } from "../../types/LocalStorageKeys";
+import { RoutePath } from "../../types/routes";
+import { User } from "../../types/api-types/user";
 
 const mobile: string = "600px";
 const desktop: string = "1024px";
 const tablet: string = "825px";
 
-const Login = () => {
+const queryClient = new QueryClient()
+
+export default function Login() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <MainLogin />
+    </QueryClientProvider>
+  )
+}
+
+const MainLogin = () => {
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
+  const email = useRef('')
+  const password = useRef('')
+
+    const mutation = useMutation(AuthService.login, {
+    onSuccess: (data: LoginResponse & ErrorResponse) => {
+      if (data.statusCode) {
+        console.log(data)
+        setErrorMessage(data.message);
+        return;
+      }
+      if (data.token && data.user) {
+        LocalStorageHelper.set<string>(LocalStorageKeys.TOKEN, data.token);
+        LocalStorageHelper.set<User>(LocalStorageKeys.USER, data.user);
+        navigate(RoutePath.HOME)
+        
+      }
+      setErrorMessage("Tente novamente!");
+    },
+
+    onError: () => {
+      setErrorMessage("Ocorreu um erro durante a requisição");
+    },
+  });
+
+  function Submit(){
+    const data = {
+      email : email.current,
+      password: password.current
+    }
+    console.log(data)
+    email.current = ''
+    password.current = ''
+    mutation.mutate(data);
+    setErrorMessage("");
+  }
+
   const transition = {
     hidden: { opacity: 0 },
     show: {
@@ -52,6 +109,7 @@ const Login = () => {
             <InputContainer>
               <Input
                 id={"id1"}
+                onChange={({ target }) => email.current = target.value}
                 placeholder="Insira seu email"
                 type="text"
                 autoComplete="off"
@@ -60,6 +118,7 @@ const Login = () => {
             <InputContainer>
               <Input
                 id={"id2"}
+                onChange={({ target }) => password.current = target.value}
                 placeholder="Insira sua senha"
                 type={eyeLogic ? "password" : "text"}
                 autoComplete="off"
@@ -70,7 +129,7 @@ const Login = () => {
               ></EyeIcon>
             </InputContainer>
             <ForgetPassword>Esqueceu a senha ?</ForgetPassword>
-            <EnterBtn>Entrar</EnterBtn>
+            <EnterBtn onClick={() => Submit()}>Entrar</EnterBtn>
           </InputGrid>
           <SocialContainer>
             Ou entre com
@@ -86,7 +145,6 @@ const Login = () => {
   );
 };
 
-export default Login;
 
 const EyeIcon = styled.img`
   width: 26px;
@@ -294,7 +352,7 @@ export const TextImg = styled.div`
   margin: 15% auto;
   // tablet
   @media screen and (min-width: 0) and (max-width: ${tablet}) {
-    padding: 30% 0 25% 0;
+    padding: 10% 0 25% 0;
   }
 `;
 
