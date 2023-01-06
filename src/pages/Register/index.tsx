@@ -8,12 +8,16 @@ import styled from "styled-components";
 import { colors } from "../../styles/colors";
 import Link from "react";
 import Image from "react";
+import { useNavigate } from "react-router-dom";
+import { RoutePath } from "../../types/routes";
 
 const mobile: string = "600px";
 const desktop: string = "1024px";
 const tablet: string = "825px";
 
 const Register = () => {
+  const navigate = useNavigate();
+
   const transition = {
     hidden: { opacity: 0 },
     show: {
@@ -33,11 +37,27 @@ const Register = () => {
               <Text>Register</Text>
             </TitleContainer>
             <Description>
-              Já possui uma conta ? <Strong>Entrar</Strong>
+              Já possui uma conta ?{" "}
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate(RoutePath.LOGIN);
+                }}
+              >
+                Entrar
+              </button>
             </Description>
           </TextImg>
 
           <InputGrid>
+            <InputContainer>
+              <Input
+                id={"id2"}
+                placeholder="Insira seu nome"
+                type="text"
+                autoComplete="off"
+              />
+            </InputContainer>
             <InputContainer>
               <Input
                 id={"id1"}
@@ -51,6 +71,22 @@ const Register = () => {
                 id={"id2"}
                 placeholder="Insira sua senha"
                 type="password"
+                autoComplete="off"
+              />
+            </InputContainer>
+            <InputContainer>
+              <Input
+                id={"id2"}
+                placeholder="Repita sua senha"
+                type="password"
+                autoComplete="off"
+              />
+            </InputContainer>
+            <InputContainer>
+              <Input
+                id={"id2"}
+                placeholder="Coloque uma imagem"
+                type="file"
                 autoComplete="off"
               />
             </InputContainer>
@@ -87,35 +123,35 @@ const InputContainer = styled.div`
 `;
 
 const Input = styled.input`
-border-radius: 0;
-display: flex;
-font-size: 12px;
-padding: 0.75rem 1.3rem ;
-text-shadow: none;
-background: ${colors.primaryWhite};
-border: 0;
-border-radius: 8px;
-flex: 1 1 auto;
-transition:0.3s;
-order: 2;
-color:${colors.primaryBlack};
-line-height:25px;
--webkit-box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
--moz-box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
-box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
-&:focus {
-  outline:none;
-}
+  border-radius: 0;
+  display: flex;
+  font-size: 12px;
+  padding: 0.75rem 1.3rem;
+  text-shadow: none;
+  background: ${colors.primaryWhite};
+  border: 0;
+  border-radius: 8px;
+  flex: 1 1 auto;
+  transition: 0.3s;
+  order: 2;
+  color: ${colors.primaryBlack};
+  line-height: 25px;
+  -webkit-box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
+  box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
+  &:focus {
+    outline: none;
+  }
 
-&:not(:focus) {
-  color: ${colors.primaryBlue};
-}
-}
-::placeholder {
-    font-weight:400;
-    opacity:0.5;
-    color:${colors.primaryBlack};
-}
+  &:not(:focus) {
+    color: ${colors.primaryBlue};
+  }
+
+  ::placeholder {
+    font-weight: 400;
+    opacity: 0.5;
+    color: ${colors.primaryBlack};
+  }
 `;
 
 export const EnterBtn = styled.div`
@@ -183,12 +219,6 @@ const Text = styled.div`
   font-weight: 700;
 `;
 
-const Strong = styled.div`
-  color: #136a9a;
-  font-weight: 700;
-  padding-left: 0.5rem;
-`;
-
 const Description = styled.div`
   color: ${colors.primaryWhite};
   font-size: 14px;
@@ -201,6 +231,16 @@ const Description = styled.div`
   // Mobile
   @media screen and (min-width: 0) and (max-width: ${mobile}) {
     padding: 1.25rem 0 0;
+  }
+
+  button {
+    border: none;
+    background-color: ${colors.primaryBlue};
+    cursor: pointer;
+    color: #136a9a;
+    font-weight: 700;
+    padding-left: 0.5rem;
+    font-weight: 800;
   }
 `;
 
@@ -219,7 +259,7 @@ export const Input2 = styled.input`
   box-shadow: 0px 0px 0px rgba(255, 255, 255, 0.1);
   text-shadow: 0px 0px 12px rgba(255, 255, 255, 0.1);
   ::placeholder {
-    color: color: ${colors.primaryBlue};
+    color: ${colors.primaryBlue};
     font-weight: 300;
     opacity: 0.5;
     font-size: 0.9rem;
@@ -233,7 +273,7 @@ export const Input2 = styled.input`
 `;
 
 export const Subcontainer = styled.div`
-  width: 260px;
+  width: 320px;
   border-radius: 8px;
   text-align: center;
   height: fit-content;
@@ -275,10 +315,10 @@ export const TitleContainer = styled.div`
 `;
 
 export const SubDescription = styled.div`
-background:green;
-color: ${colors.primaryWhite}
-font-weight:700;
-position:relative;
+  background: green;
+  color: ${colors.primaryWhite};
+  font-weight: 700;
+  position: relative;
 `;
 
 export const SocialContainer = styled.div`

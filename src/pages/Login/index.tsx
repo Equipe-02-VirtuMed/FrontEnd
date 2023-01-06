@@ -36,21 +36,20 @@ export default function Login() {
 const MainLogin = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
-  const email = useRef('')
-  const password = useRef('')
+  const email = useRef("");
+  const password = useRef("");
 
-    const mutation = useMutation(AuthService.login, {
+  const mutation = useMutation(AuthService.login, {
     onSuccess: (data: LoginResponse & ErrorResponse) => {
       if (data.statusCode) {
-        console.log(data)
+        console.log(data);
         setErrorMessage(data.message);
         return;
       }
       if (data.token && data.user) {
         LocalStorageHelper.set<string>(LocalStorageKeys.TOKEN, data.token);
         LocalStorageHelper.set<User>(LocalStorageKeys.USER, data.user);
-        navigate(RoutePath.HOME)
-        
+        navigate(RoutePath.HOME);
       }
       setErrorMessage("Tente novamente!");
     },
@@ -60,14 +59,14 @@ const MainLogin = () => {
     },
   });
 
-  function Submit(){
+  function Submit() {
     const data = {
-      email : email.current,
-      password: password.current
-    }
-    console.log(data)
-    email.current = ''
-    password.current = ''
+      email: email.current,
+      password: password.current,
+    };
+    console.log(data);
+    email.current = "";
+    password.current = "";
     mutation.mutate(data);
     setErrorMessage("");
   }
@@ -101,7 +100,15 @@ const MainLogin = () => {
               <Text>Login </Text>
             </TitleContainer>
             <Description>
-              Não tem uma conta ? <Strong>Criar conta</Strong>
+              Não tem uma conta ?{" "}
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate(RoutePath.REGISTER);
+                }}
+              >
+                Criar conta
+              </button>
             </Description>
           </TextImg>
 
@@ -109,7 +116,7 @@ const MainLogin = () => {
             <InputContainer>
               <Input
                 id={"id1"}
-                onChange={({ target }) => email.current = target.value}
+                onChange={({ target }) => (email.current = target.value)}
                 placeholder="Insira seu email"
                 type="text"
                 autoComplete="off"
@@ -118,7 +125,7 @@ const MainLogin = () => {
             <InputContainer>
               <Input
                 id={"id2"}
-                onChange={({ target }) => password.current = target.value}
+                onChange={({ target }) => (password.current = target.value)}
                 placeholder="Insira sua senha"
                 type={eyeLogic ? "password" : "text"}
                 autoComplete="off"
@@ -145,11 +152,10 @@ const MainLogin = () => {
   );
 };
 
-
 const EyeIcon = styled.img`
   width: 26px;
   height: 26px;
-  padding-right:1rem;
+  padding-right: 1rem;
 `;
 
 const InputGrid = styled.div`
@@ -163,41 +169,40 @@ const InputGrid = styled.div`
 
 const InputContainer = styled.div`
   display: flex;
-  align-items:center;
+  align-items: center;
   border-radius: 8px;
   background: ${colors.primaryWhite};
   -webkit-box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
--moz-box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
-box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
+  box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
 `;
 
 const Input = styled.input`
-display: flex;
-font-size: 12px;
-font-weight:700;
-padding: 0.75rem 1.3rem ;
-text-shadow: none;
-background: transparent;
-border: 0;
-flex: 1 1 auto;
-transition:0.3s;
-color:${colors.primaryBlack};
-line-height:25px;
+  display: flex;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 0.75rem 1.3rem;
+  text-shadow: none;
+  background: transparent;
+  border: 0;
+  flex: 1 1 auto;
+  transition: 0.3s;
+  color: ${colors.primaryBlack};
+  line-height: 25px;
 
-&:focus {
-  outline:none;
-  color: ${colors.primaryBlue};
-}
+  &:focus {
+    outline: none;
+    color: ${colors.primaryBlue};
+  }
 
-&:not(:focus) {
-  color: ${colors.primaryBlue};
-}
-}
-::placeholder {
-    font-weight:400;
-    opacity:0.5;
-    color:${colors.primaryBlack};
-}
+  &:not(:focus) {
+    color: ${colors.primaryBlue};
+  }
+  ::placeholder {
+    font-weight: 400;
+    opacity: 0.5;
+    color: ${colors.primaryBlack};
+  }
 `;
 
 export const EnterBtn = styled.div`
@@ -263,16 +268,10 @@ const Text = styled.div`
   font-size: 22px;
   color: ${colors.primaryWhite};
   font-weight: 700;
-   // tablet
+  // tablet
   @media screen and (min-width: 0) and (max-width: ${tablet}) {
     font-size: 28px;
   }
-`;
-
-const Strong = styled.div`
-  color: #136a9a;
-  font-weight: 700;
-  padding-left: 0.5rem;
 `;
 
 const Description = styled.div`
@@ -288,6 +287,16 @@ const Description = styled.div`
   @media screen and (min-width: 0) and (max-width: ${tablet}) {
     padding: 1.25rem 0 0;
     font-size: 14px;
+  }
+
+  button {
+    border: none;
+    background-color: ${colors.primaryBlue};
+    cursor: pointer;
+    color: #136a9a;
+    font-weight: 700;
+    padding-left: 0.5rem;
+    font-weight: 800;
   }
 `;
 
@@ -306,7 +315,7 @@ export const Input2 = styled.input`
   box-shadow: 0px 0px 0px rgba(255, 255, 255, 0.1);
   text-shadow: 0px 0px 12px rgba(255, 255, 255, 0.1);
   ::placeholder {
-    color: color: ${colors.primaryBlue};
+    color: ${colors.primaryBlue};
     font-weight: 300;
     opacity: 0.5;
     font-size: 0.9rem;
@@ -334,12 +343,12 @@ export const Subcontainer = styled.div`
   @media screen and (min-width: 0) and (max-width: ${tablet}) {
     padding: 0 2rem;
     width: 60%;
-    margin:0 auto;
+    margin: 0 auto;
     box-sizing: border-box;
     display: block;
     background: transparent;
   }
-    // mobile
+  // mobile
   @media screen and (min-width: 0) and (max-width: ${mobile}) {
     width: 100%;
   }
@@ -363,10 +372,10 @@ export const TitleContainer = styled.div`
 `;
 
 export const SubDescription = styled.div`
-background:green;
-color: ${colors.primaryWhite}
-font-weight:700;
-position:relative;
+  background: green;
+  color: ${colors.primaryWhite};
+  font-weight: 700;
+  position: relative;
 `;
 
 export const SocialContainer = styled.div`

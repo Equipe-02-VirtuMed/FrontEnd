@@ -16,10 +16,10 @@ const Router = () => {
     <Routes>
       <Route path={RoutePath.LOGIN} element={<Login />} />
       <Route path={RoutePath.REGISTER} element={<Register />} />
-      <Route path="/" element={<AuthenticatedRoutes />}>
+      {/* <Route path="/" element={<AuthenticatedRoutes />}>
         <Route path={RoutePath.HOME} element={<Homepage />} />
         <Route path={RoutePath.CALL} element={<Call />} />
-      </Route>
+      </Route> */}
     </Routes>
   );
 };
