@@ -3,4 +3,5 @@ export enum RoutePath {
     LOGIN = '/login',
     REGISTER = '/register',
     CALL = '/call',
+    VIDEO = '/video'
   }

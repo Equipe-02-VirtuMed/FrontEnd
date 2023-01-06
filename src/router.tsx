@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { RoutePath } from "./types/routes";
 import { Auth } from "./helpers/Auth";
+import Video from "./pages/VideoCall";
 
 const AuthenticatedRoutes = () => {
   const isAuthenticated = Auth.isAuth();
@@ -20,6 +21,7 @@ const Router = () => {
         <Route path={RoutePath.HOME} element={<Homepage />} />
         <Route path={RoutePath.CALL} element={<Call />} />
       </Route>
+      <Route path={RoutePath.VIDEO} element={<Video />} />
     </Routes>
   );
 };
