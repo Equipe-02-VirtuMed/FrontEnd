@@ -42,7 +42,6 @@ const MainLogin = () => {
   const mutation = useMutation(AuthService.login, {
     onSuccess: (data: LoginResponse & ErrorResponse) => {
       if (data.statusCode) {
-        console.log(data);
         setErrorMessage(data.message);
         return;
       }

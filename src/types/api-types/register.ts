@@ -1,11 +1,10 @@
 import { User } from "./user";
 export interface Register {
-    email: string;
-    name: string;
-    password: string;
-    residency?: string;
-    confirmPassword: string;
-    image: string;
+    email: string | undefined;
+    name: string | undefined;
+    password: string | undefined;
+    confirmPassword: string | undefined;
+    image?: string | undefined;
 }
 
 export interface RegisterResponse {

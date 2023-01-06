@@ -6,17 +6,60 @@ import apple from "../../assets/apple.svg";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { colors } from "../../styles/colors";
-import Link from "react";
+import Link, { useState } from "react";
 import Image from "react";
 import { useNavigate } from "react-router-dom";
 import { RoutePath } from "../../types/routes";
+import { QueryClient, QueryClientProvider, useMutation } from "@tanstack/react-query";
+import { AuthService } from "../../services/AuthServices";
+import { LocalStorageKeys } from "../../types/LocalStorageKeys";
+import { LocalStorageHelper } from "../../helpers/LocalStorageHelper";
+import { LoginResponse } from "../../types/api-types/login";
+import { ErrorResponse } from "../../types/api-types/error";
+import { User } from "../../types/api-types/user";
+import { createUser } from "../../helpers/endpoint/user";
 
 const mobile: string = "600px";
 const desktop: string = "1024px";
 const tablet: string = "825px";
+/*
+const queryClient = new QueryClient()
 
+
+export default function Register2() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Register />
+    </QueryClientProvider>
+  )
+}
+*/
 const Register = () => {
-  const navigate = useNavigate();
+ // const navigate = useNavigate();
+
+  interface newInputsInterface {
+    email: string;
+    name: string;
+    password: string;
+    confirmPassword: string;
+    image: string;
+  }
+
+  const input1 = {} as newInputsInterface
+
+  const [newInputs, setNewInputs] = useState<newInputsInterface[]>([input1])
+
+  const onChangeInput = (
+    state: any,
+    setState: any,
+    propName: string,
+    e: any,
+  ) => {
+    const arr = [...state]
+    const item = arr[0]
+    item[propName] = e
+    setState(arr)
+  }
 
   const transition = {
     hidden: { opacity: 0 },
@@ -24,6 +67,47 @@ const Register = () => {
       opacity: 1,
     },
   };
+
+  async function create() {
+    console.log(newInputs[0])
+    try {
+      const res = await createUser(newInputs[0]).then((res) => {
+        console.log(res)
+      })
+    } catch (err: any) {
+      console.log(err)
+    }
+    // setTimeout(() => Submit(),1000 * 2)
+  }
+  /*
+    const mutation = useMutation(AuthService.login, {
+      onSuccess: (data: LoginResponse & ErrorResponse) => {
+        if (data.statusCode) {
+          setErrorMessage(data.message);
+          return;
+        }
+        if (data.token && data.user) {
+          LocalStorageHelper.set<string>(LocalStorageKeys.TOKEN, data.token);
+          LocalStorageHelper.set<User>(LocalStorageKeys.USER, data.user);
+          navigate(RoutePath.HOME);
+        }
+        setErrorMessage("Tente novamente!");
+      },
+  
+      onError: () => {
+        setErrorMessage("Ocorreu um erro durante a requisição");
+      },
+    });
+  
+    function Submit() {
+      const data = {
+        email: newInputs[0].email,
+        password: newInputs[0].password,
+      };
+      mutation.mutate(data);
+      setErrorMessage("");
+    }
+    */
 
   return (
     <Container>
@@ -52,45 +136,85 @@ const Register = () => {
           <InputGrid>
             <InputContainer>
               <Input
-                id={"id2"}
+                id={"id1"}
                 placeholder="Insira seu nome"
                 type="text"
                 autoComplete="off"
+                onChange={(e) =>
+                  onChangeInput(
+                    newInputs,
+                    setNewInputs,
+                    'name',
+                    e.target.value
+                  )
+                }
               />
             </InputContainer>
             <InputContainer>
               <Input
-                id={"id1"}
+                id={"id2"}
                 placeholder="Insira seu email"
                 type="text"
                 autoComplete="off"
+                onChange={(e) =>
+                  onChangeInput(
+                    newInputs,
+                    setNewInputs,
+                    'email',
+                    e.target.value
+                  )
+                }
               />
             </InputContainer>
             <InputContainer>
               <Input
-                id={"id2"}
+                id={"id3"}
                 placeholder="Insira sua senha"
                 type="password"
                 autoComplete="off"
+                onChange={(e) =>
+                  onChangeInput(
+                    newInputs,
+                    setNewInputs,
+                    'password',
+                    e.target.value
+                  )
+                }
               />
             </InputContainer>
             <InputContainer>
               <Input
-                id={"id2"}
+                id={"id4"}
                 placeholder="Repita sua senha"
                 type="password"
                 autoComplete="off"
+                onChange={(e) =>
+                  onChangeInput(
+                    newInputs,
+                    setNewInputs,
+                    'confirmPassword',
+                    e.target.value
+                  )
+                }
               />
             </InputContainer>
             <InputContainer>
               <Input
-                id={"id2"}
+                id={"id5"}
                 placeholder="Coloque uma imagem"
                 type="file"
                 autoComplete="off"
+                onChange={(e) =>
+                  onChangeInput(
+                    newInputs,
+                    setNewInputs,
+                    'image',
+                    'https://' + e.target.value
+                  )
+                }
               />
             </InputContainer>
-            <EnterBtn>Criar conta</EnterBtn>
+            <EnterBtn onClick={() => create()}>Criar conta</EnterBtn>
           </InputGrid>
           <SocialContainer>
             Ou criar com
@@ -106,7 +230,7 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Register
 
 const InputGrid = styled.div`
   width: 100%;
@@ -374,3 +498,7 @@ export const LogoContainer = styled.div`
   margin: 0 auto;
   line-height: 0;
 `;
+function setErrorMessage(message: any) {
+  throw new Error("Function not implemented.");
+}
+
