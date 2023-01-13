@@ -16,9 +16,13 @@ const Router = () => {
     <Routes>
       <Route path={RoutePath.LOGIN} element={<Login />} />
       <Route path={RoutePath.REGISTER} element={<Register />} />
+
+      {/* Add this routes inside the authenticatedRoutes after finish */}
+      <Route path={RoutePath.HOME} element={<Homepage />} />
+      <Route path={RoutePath.CALL} element={<Call />} />
+
       <Route path="/" element={<AuthenticatedRoutes />}>
-        <Route path={RoutePath.HOME} element={<Homepage />} />
-        <Route path={RoutePath.CALL} element={<Call />} />
+
       </Route>
     </Routes>
   );
