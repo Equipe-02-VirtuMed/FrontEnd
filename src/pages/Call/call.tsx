@@ -26,7 +26,7 @@ const Call = () => {
   const [socket, setSocket] = useState<Socket>()
   const [messageChat, setMessageChat] = useState<any>([])
   const [message, setMessage] = useState('')
-  const [lastPong, setLastPong] = useState(null);
+  const [type, setType] = useState(0);
   const [chatView, setChat] = useState(false);
   let { id } = useParams();
   const transition = {
@@ -39,141 +39,155 @@ const Call = () => {
   function Send(value?: string) {
     const num = Math.random() >= 0.5
     // Replace isPatient by the role inside the cookie
-    if (message !== '' || fileSelected !== undefined) {
-      const url = window.URL.createObjectURL(new Blob([fileSelected]));
-      var data = {
-        username:'',
-        isPatient:false,
-        body:message,
-        filename: fileSelected?.name,
-        fileDownload: url,
-        file:fileSelected}
-      socket?.emit('message', data)
+    if (message !== '') {
+      var data_msg = {
+        username: '',
+        isPatient: false,
+        body: message,
+        filename: null,
+        fileDownload: null,
+        file: null
+      }
+      socket?.emit('message', data_msg)
       setMessage('')
       setFileSelected(null)
       var elementInput = (document.getElementById('sendmessage') as HTMLInputElement).value = '';
-  }
-}
+    }else if(fileSelected !== undefined && fileSelected !== null){
+      var url = window.URL.createObjectURL(new Blob([fileSelected]));
+      var data_file = {
+        username: '',
+        isPatient: false,
+        body: message,
+        filename: fileSelected?.name,
+        fileDownload: url,
+        file: fileSelected
+      }
+      socket?.emit('file', data_file)
+      setMessage('')
+      setFileSelected(null)
 
-function Test() {
-  console.log('fileDownload')
-}
-
-useEffect(() => {
-  const newSocket = io("http://localhost:8001")
-  setSocket(newSocket)
-  useCookies
-}, [setSocket]);
-
-const messageListener = (data: any) => {
-  setMessageChat([...messageChat, JSON.parse(data)])
-  scrollToBottom()
-}
-
-const messagesEndRef = useRef<any>(null)
-
-const scrollToBottom = () => {
-  messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-}
-
-useEffect(() => {
-  socket?.on('receive-message', messageListener)
-  return () => { socket?.off('receive-message', messageListener) }
-}, [messageListener]);
-
-const [animate, setAnimate] = useState(false)
-
-// Animate on click button and revert after 3000ms.
-const doAnimate = useCallback(() => {
-  setAnimate(true)
-  setTimeout(() => {
-    setAnimate(false)
-  }, 3000)
-}, [])
-
-const hiddenFileInput = React.useRef<any>();
-const [fileSelected, setFileSelected] = useState<any>(null)
-
-const handleClick = (event: any) => {
-  hiddenFileInput.current.click();
-
-};
-const handleChange = (event: any) => {
-  const fileUploaded = event.target.files[0];
-  setFileSelected(fileUploaded)
-};
-
-function DeleteFile() {
-  var elementInput = (document.getElementById('uploadFile') as HTMLInputElement).value = '';
-  setFileSelected(null)
-}
-
-function Download(data:Blob,filename:string){
-  saveAs(data, 'virtumed-' + filename)
-}
-
-
-return (
-  <Transition in={chatView} timeout={500}>
-    {(state: any) => (
-      <Container>
-        <VideoContainer state={chatView}>
-          <MainVideo onClick={() => Test()} state={chatView}>MAIN VIDEO</MainVideo>
-          <SubVideo state={chatView}>Second video</SubVideo>
-        </VideoContainer>
-        <Chat state={chatView}>
-          {messageChat.map((res: any, i: number) =>
-            <MessageBox ref={messagesEndRef} key={i} isPacient={res.isPatient}>
-              <div>
-                
-                <Avatar src={image1} />
-              </div>
-              
-              {res.file !== null ? <File onClick={() => Download(res.fileDownload,res.filename)} isPacient={res.isPatient}>{res.filename}</File> : <TextMessage isPacient={res.isPatient}>{res.body}</TextMessage>}
-
-            </MessageBox>
-          )}
-        </Chat>
-        <FileBlock isFile={fileSelected !== null}>
-          <BoxIcon style={{ textAlign: 'left', padding: 0 }}>
-            <Btn onClick={() => DeleteFile()} src={deleteIcon} />
-          </BoxIcon>
-          <Filename>{fileSelected !== null ? fileSelected.name : null}</Filename>
-        </FileBlock>
-        <InputContainer state={chatView}>
-          <BoxIcon>
-            <Button onClick={handleClick}>
-              <img style={{ height: '28px' }} src={file} />
-            </Button>
-          </BoxIcon>
-          <input type="file"
-            id="uploadFile"
-            ref={hiddenFileInput}
-            onChange={handleChange}
-            style={{ display: 'none' }}
-          />
-          <Input id="sendmessage" onChange={(e) => setMessage(e.target.value)} state={chatView} />
-          <BoxIcon state={chatView} >
-            <Btn onClick={() => Send()} src={sendIcon} />
-          </BoxIcon>
-        </InputContainer>
-        <ControlButtons state={chatView}>
-          <BoxIcon>
-            <Btn src={camera} />
-          </BoxIcon>
-          <BoxIcon>
-            <Btn src={cancel} />
-          </BoxIcon>
-          <BoxIcon>
-            <Btn onClick={() => setChat(!chatView)} src={chat} />
-          </BoxIcon>
-        </ControlButtons>
-      </Container>
-    )
     }
-  </Transition >
+  }
 
-)
+
+  useEffect(() => {
+    const newSocket = io("http://localhost:8001")
+    setSocket(newSocket)
+    useCookies
+  }, [setSocket]);
+
+  const messageListener = (data: any) => {
+    setMessageChat([...messageChat, JSON.parse(data)])
+    scrollToBottom()
+  }
+
+  const messagesEndRef = useRef<any>(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  useEffect(() => {
+    socket?.on('receive-message', messageListener)
+    return () => { socket?.off('receive-message', messageListener) }
+  }, [messageListener]);
+
+  const [animate, setAnimate] = useState(false)
+
+  // Animate on click button and revert after 3000ms.
+  const doAnimate = useCallback(() => {
+    setAnimate(true)
+    setTimeout(() => {
+      setAnimate(false)
+    }, 3000)
+  }, [])
+
+  const hiddenFileInput = React.useRef<any>();
+  const [fileSelected, setFileSelected] = useState<any>(null)
+
+  const handleClick = (event: any) => {
+    hiddenFileInput.current.click();
+
+  };
+  const handleChange = (event: any) => {
+    const fileUploaded = event.target.files[0];
+    var elementInput = (document.getElementById('uploadFile') as HTMLInputElement).value = '';
+    var elementInputMessage = (document.getElementById('sendmessage') as HTMLInputElement).value = '';
+    setMessage('')
+    setFileSelected(fileUploaded)
+  };
+
+  function DeleteFile() {
+    var elementInput = (document.getElementById('uploadFile') as HTMLInputElement).value = '';
+    setFileSelected(null)
+  }
+
+  function Download(data: Blob, filename: string) {
+    saveAs(data, 'virtumed-' + filename)
+  }
+
+
+  return (
+    <Transition in={chatView} timeout={500}>
+      {(state: any) => (
+        <Container>
+          <VideoContainer state={chatView}>
+            <MainVideo state={chatView} onClick={() => console.log(fileSelected)}>MAIN VIDEO</MainVideo>
+            <SubVideo state={chatView}>Second video</SubVideo>
+          </VideoContainer>
+          <Chat state={chatView}>
+            {messageChat.map((res: any, i: number) =>
+              <MessageBox ref={messagesEndRef} key={i} isPacient={res.isPatient}>
+                <div>
+
+                  <Avatar src={image1} />
+                </div>
+
+                {res.file !== null ? <File onClick={() => Download(res.fileDownload, res.filename)} isPacient={res.isPatient}>{res.filename}</File> : <TextMessage isPacient={res.isPatient}>{res.body}</TextMessage>}
+
+              </MessageBox>
+            )}
+          </Chat>
+          <FileBlock isFile={fileSelected !== null}>
+            <BoxIcon style={{ textAlign: 'left', padding: 0 }}>
+              <Btn onClick={() => DeleteFile()} src={deleteIcon} />
+            </BoxIcon>
+            <Filename>{fileSelected !== null ? fileSelected.name : null}</Filename>
+          </FileBlock>
+          <InputContainer state={chatView}>
+            <BoxIcon>
+              <Button onClick={handleClick}>
+                <img style={{ height: '28px' }} src={file} />
+              </Button>
+            </BoxIcon>
+            <input type="file"
+              id="uploadFile"
+              ref={hiddenFileInput}
+              onChange={handleChange}
+              style={{ display: 'none' }}
+            />
+            <Input id="sendmessage" onChange={(e) => setMessage(e.target.value)} state={chatView} disabled={fileSelected !== null} />
+            <BoxIcon state={chatView} >
+              <Btn onClick={() => Send()} src={sendIcon} />
+            </BoxIcon>
+          </InputContainer>
+          <ControlButtons state={chatView}>
+            <BoxIcon>
+              <Btn src={camera} />
+            </BoxIcon>
+            <BoxIcon>
+              <Btn src={cancel} />
+            </BoxIcon>
+            <BoxIcon>
+              <Btn onClick={() => setChat(!chatView)} src={chat} />
+            </BoxIcon>
+          </ControlButtons>
+        </Container>
+      )
+      }
+    </Transition >
+
+  )
 };
 
 export default Call;
