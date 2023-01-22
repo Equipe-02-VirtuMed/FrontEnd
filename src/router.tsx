@@ -5,6 +5,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { RoutePath } from "./types/routes";
 import { Auth } from "./helpers/Auth";
+import EditUser from "./pages/User";
+
 
 const AuthenticatedRoutes = () => {
   const isAuthenticated = Auth.isAuth();
@@ -17,9 +19,12 @@ const Router = () => {
       <Route path={RoutePath.LOGIN} element={<Login />} />
       <Route path={RoutePath.REGISTER} element={<Register />} />
 
+
       {/* Add this routes inside the authenticatedRoutes after finish */}
       <Route path={RoutePath.HOME} element={<Homepage />} />
       <Route path={RoutePath.CALL} element={<Call />} />
+      <Route path={RoutePath.USER} element={<EditUser />} />
+
 
       <Route path="/" element={<AuthenticatedRoutes />}>
 

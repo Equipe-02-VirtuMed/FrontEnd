@@ -101,7 +101,7 @@ const MainLogin = () => {
               <Text>Login </Text>
             </TitleContainer>
             <Description>
-              Não tem uma conta ? <Strong>Criar conta</Strong>
+              Não tem uma conta ? <Strong href="/register">Criar conta</Strong>
             </Description>
           </TextImg>
 
@@ -125,7 +125,7 @@ const MainLogin = () => {
               />
               <EyeIcon
                 onClick={eyeChange}
-                src={eyeLogic ? eye : eyeClosed}
+                src={eyeLogic ? eyeClosed  : eye}
               ></EyeIcon>
             </InputContainer>
             <ForgetPassword>Esqueceu a senha ?</ForgetPassword>
@@ -192,7 +192,7 @@ line-height:25px;
 &:not(:focus) {
   color: ${colors.primaryBlue};
 }
-}
+
 ::placeholder {
     font-weight:400;
     opacity:0.5;
@@ -269,7 +269,7 @@ const Text = styled.div`
   }
 `;
 
-const Strong = styled.div`
+const Strong = styled.a`
   color: #136a9a;
   font-weight: 700;
   padding-left: 0.5rem;
@@ -306,7 +306,7 @@ export const Input2 = styled.input`
   box-shadow: 0px 0px 0px rgba(255, 255, 255, 0.1);
   text-shadow: 0px 0px 12px rgba(255, 255, 255, 0.1);
   ::placeholder {
-    color: color: ${colors.primaryBlue};
+    color: ${colors.primaryBlue};
     font-weight: 300;
     opacity: 0.5;
     font-size: 0.9rem;
@@ -364,7 +364,7 @@ export const TitleContainer = styled.div`
 
 export const SubDescription = styled.div`
 background:green;
-color: ${colors.primaryWhite}
+color: ${colors.primaryWhite};
 font-weight:700;
 position:relative;
 `;
