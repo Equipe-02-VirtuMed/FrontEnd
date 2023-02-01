@@ -3,6 +3,5 @@ export enum RoutePath {
     LOGIN = '/login',
     REGISTER = '/register',
     USER = '/user',
-
-    CALL = '/call',
+    CALL = '/call/:id',
   }
