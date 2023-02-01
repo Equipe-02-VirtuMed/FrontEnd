@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^4.19.1",
+    "@types/react-calendar": "^3.9.0",
     "@types/styled-components": "^5.1.26",
     "axios": "^1.2.1",
     "framer-motion": "^7.6.15",
@@ -18,13 +19,14 @@
     "react-elastic-carousel": "^0.11.5",
     "react-responsive": "^9.0.2",
     "react-responsive-carousel": "^3.2.23",
-    "react-router-dom": "^6.4.5",
+    "react-router-dom": "^6.4.3",
+    "react-transition-group": "^4.4.5",
     "styled-components": "^5.3.6"
   },
   "devDependencies": {
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",
-    "@types/react-router-dom": "^5.3.3",
+    "@types/react-transition-group": "^4.4.5",
     "@vitejs/plugin-react": "^2.2.0",
     "typescript": "^4.6.4",
     "vite": "^3.2.3"

@@ -29,8 +29,8 @@ const Homepage = () => {
             </Navbar>
             <SecondContainer>
               <TextIntro>Olá {"Pedro"}, que bom te ver por aqui...😊</TextIntro>
-              <Button>Perfil</Button>
-              <Button>Consultas</Button>
+              <Button href="/user">Perfil</Button>
+              <Button href="/consulta">Consultas</Button>
               <Button>Medicos</Button>
             </SecondContainer>
             <TopicContainer>
@@ -46,7 +46,7 @@ const Homepage = () => {
                 <TopicText>ver mais</TopicText>
               </SeeMore>
             </TopicContainer>
-            <CategoriasCarousel/>
+            <CategoriasCarousel />
           </Container>
         </motion.div>
       </>
@@ -121,17 +121,18 @@ const BtnContainer = styled.div`
   display: flex;
 `;
 
-const Button = styled.div`
-  border: 0;
-  text-align: center;
-  width: 100%;
+const Button = styled.a`
   background: ${colors.secondBlue};
-  padding: 0.25rem 0;
-  margin: 1rem 0;
   color: ${colors.primaryWhite};
-  border-radius: 10px;
   font-weight: 500;
   font-size: 14px;
+  padding: 0.25rem 0;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin: 1rem 0;
+  width: 100%;
 `;
 
 const Button2 = styled.div`

@@ -1,5 +1,7 @@
 import logo from "../../assets/logo.svg";
 import lock from "../../assets/lock.svg";
+import eye from "../../assets/eye.svg";
+import eyeClosed from "../../assets/eye-closed.svg";
 import gmail from "../../assets/gmail.svg";
 import facebook from "../../assets/facebook.svg";
 import apple from "../../assets/apple.svg";
@@ -68,6 +70,16 @@ const Register = () => {
     },
   };
 
+    // Eye icon ( hidden and open ) logic
+    const [eyeLogic, setEyeLogic] = useState(true);
+    const eyeChange = () => {
+      if (eyeLogic) {
+        setEyeLogic(false);
+      } else {
+        setEyeLogic(true);
+      }
+    };
+
   async function create() {
     console.log(newInputs[0])
     try {
@@ -118,41 +130,25 @@ const Register = () => {
           </LogoContainer>
           <TextImg>
             <TitleContainer>
-              <Text>Register</Text>
+              <Text>Registre-se</Text>
             </TitleContainer>
             <Description>
-              Já possui uma conta ?{" "}
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate(RoutePath.LOGIN);
-                }}
-              >
-                Entrar
-              </button>
+              Já possui uma conta ? <Strong>Entrar</Strong>
             </Description>
           </TextImg>
 
           <InputGrid>
-            <InputContainer>
+          <InputContainer>
               <Input
                 id={"id1"}
-                placeholder="Insira seu nome"
+                placeholder="Nome"
                 type="text"
                 autoComplete="off"
-                onChange={(e) =>
-                  onChangeInput(
-                    newInputs,
-                    setNewInputs,
-                    'name',
-                    e.target.value
-                  )
-                }
               />
             </InputContainer>
             <InputContainer>
               <Input
-                id={"id2"}
+                id={"id1"}
                 placeholder="Insira seu email"
                 type="text"
                 autoComplete="off"
@@ -168,7 +164,7 @@ const Register = () => {
             </InputContainer>
             <InputContainer>
               <Input
-                id={"id3"}
+                id={"id2"}
                 placeholder="Insira sua senha"
                 type="password"
                 autoComplete="off"
@@ -213,6 +209,10 @@ const Register = () => {
                   )
                 }
               />
+              <EyeIcon
+                onClick={eyeChange}
+                src={eyeLogic ? eyeClosed  : eye}
+              ></EyeIcon>
             </InputContainer>
             <EnterBtn onClick={() => create()}>Criar conta</EnterBtn>
           </InputGrid>
@@ -232,6 +232,11 @@ const Register = () => {
 
 export default Register
 
+const EyeIcon = styled.img`
+  width: 26px;
+  height: 26px;
+  padding-right:1rem;
+`;
 const InputGrid = styled.div`
   width: 100%;
   display: grid;
@@ -243,39 +248,44 @@ const InputGrid = styled.div`
 
 const InputContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  align-items:center;
+  border-radius: 8px;
+  background: ${colors.primaryWhite};
+  -webkit-box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
+-moz-box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
+box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
 `;
 
 const Input = styled.input`
-  border-radius: 0;
-  display: flex;
-  font-size: 12px;
-  padding: 0.75rem 1.3rem;
-  text-shadow: none;
-  background: ${colors.primaryWhite};
-  border: 0;
-  border-radius: 8px;
-  flex: 1 1 auto;
-  transition: 0.3s;
-  order: 2;
-  color: ${colors.primaryBlack};
-  line-height: 25px;
-  -webkit-box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
-  -moz-box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
-  box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
-  &:focus {
-    outline: none;
-  }
+border-radius: 0;
+display: flex;
+font-size: 12px;
+padding: 0.75rem 1.3rem ;
+text-shadow: none;
+background: ${colors.primaryWhite};
+border: 0;
+border-radius: 8px;
+flex: 1 1 auto;
+transition:0.3s;
+order: 2;
+color:${colors.primaryBlack};
+line-height:25px;
+-webkit-box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
+-moz-box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
+box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
+&:focus {
+  outline:none;
+}
 
-  &:not(:focus) {
-    color: ${colors.primaryBlue};
-  }
-
-  ::placeholder {
-    font-weight: 400;
-    opacity: 0.5;
-    color: ${colors.primaryBlack};
-  }
+&:not(:focus) {
+  color: ${colors.primaryBlue};
+}
+}
+::placeholder {
+    font-weight:400;
+    opacity:0.5;
+    color:${colors.primaryBlack};
+}
 `;
 
 export const EnterBtn = styled.div`
@@ -305,8 +315,8 @@ export const Container = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  // Mobile
-  @media screen and (min-width: 0) and (max-width: ${mobile}) {
+  // tablet
+  @media screen and (min-width: 0) and (max-width: ${tablet}) {
     display: block;
     padding: 4rem 0 0 0;
   }
@@ -338,23 +348,34 @@ const Icondiv = styled.div`
 `;
 
 const Text = styled.div`
-  font-size: 28px;
+  font-size: 22px;
   color: ${colors.primaryWhite};
   font-weight: 700;
+   // tablet
+  @media screen and (min-width: 0) and (max-width: ${tablet}) {
+    font-size: 28px;
+  }
+`;
+
+const Strong = styled.div`
+  color: #136a9a;
+  font-weight: 700;
+  padding-left: 0.5rem;
 `;
 
 const Description = styled.div`
   color: ${colors.primaryWhite};
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 400;
   padding: 1.25rem 0 0;
   width: fit-content;
   display: flex;
   margin: 0 auto;
   text-align: center;
-  // Mobile
-  @media screen and (min-width: 0) and (max-width: ${mobile}) {
+  // tablet
+  @media screen and (min-width: 0) and (max-width: ${tablet}) {
     padding: 1.25rem 0 0;
+    font-size: 14px;
   }
 
   button {
@@ -397,7 +418,7 @@ export const Input2 = styled.input`
 `;
 
 export const Subcontainer = styled.div`
-  width: 320px;
+  width: 260px;
   border-radius: 8px;
   text-align: center;
   height: fit-content;
@@ -407,17 +428,18 @@ export const Subcontainer = styled.div`
   grid-row-gap: 35px;
   background: ${colors.primaryBlue};
   padding: 2rem 2rem 0 2rem;
-  -webkit-box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
-  -moz-box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
-  box-shadow: 10px 10px 17px 0px rgba(0, 0, 0, 0.24);
-  // Mobile
-  @media screen and (min-width: 0) and (max-width: ${mobile}) {
+  // tablet
+  @media screen and (min-width: 0) and (max-width: ${tablet}) {
     padding: 0 2rem;
-    width: 100%;
+    width: 60%;
+    margin:0 auto;
     box-sizing: border-box;
     display: block;
     background: transparent;
-    box-shadow: none;
+  }
+    // mobile
+  @media screen and (min-width: 0) and (max-width: ${mobile}) {
+    width: 100%;
   }
 `;
 
@@ -425,10 +447,10 @@ export const SubTextContainer = styled.div``;
 
 export const TextImg = styled.div`
   width: 100%;
-  margin: 0 auto;
-  // Mobile
-  @media screen and (min-width: 0) and (max-width: ${mobile}) {
-    padding: 30% 0 15% 0;
+  margin: 5% auto;
+  // tablet
+  @media screen and (min-width: 0) and (max-width: ${tablet}) {
+    padding: 10% 0 25% 0;
   }
 `;
 
@@ -439,10 +461,10 @@ export const TitleContainer = styled.div`
 `;
 
 export const SubDescription = styled.div`
-  background: green;
-  color: ${colors.primaryWhite};
-  font-weight: 700;
-  position: relative;
+background:green;
+color: ${colors.primaryWhite}
+font-weight:700;
+position:relative;
 `;
 
 export const SocialContainer = styled.div`
@@ -450,8 +472,8 @@ export const SocialContainer = styled.div`
   color: ${colors.primaryWhite};
   font-size: smaller;
   text-align: center;
-  // Mobile
-  @media screen and (min-width: 0) and (max-width: ${mobile}) {
+  // tablet
+  @media screen and (min-width: 0) and (max-width: ${tablet}) {
     padding: 25% 0 0;
   }
 `;

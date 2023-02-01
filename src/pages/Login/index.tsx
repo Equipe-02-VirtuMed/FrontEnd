@@ -131,7 +131,7 @@ const MainLogin = () => {
               />
               <EyeIcon
                 onClick={eyeChange}
-                src={eyeLogic ? eye : eyeClosed}
+                src={eyeLogic ? eyeClosed  : eye}
               ></EyeIcon>
             </InputContainer>
             <ForgetPassword>Esqueceu a senha ?</ForgetPassword>
@@ -194,14 +194,15 @@ const Input = styled.input`
     color: ${colors.primaryBlue};
   }
 
-  &:not(:focus) {
-    color: ${colors.primaryBlue};
-  }
-  ::placeholder {
-    font-weight: 400;
-    opacity: 0.5;
-    color: ${colors.primaryBlack};
-  }
+&:not(:focus) {
+  color: ${colors.primaryBlue};
+}
+
+::placeholder {
+    font-weight:400;
+    opacity:0.5;
+    color:${colors.primaryBlack};
+}
 `;
 
 export const EnterBtn = styled.div`
