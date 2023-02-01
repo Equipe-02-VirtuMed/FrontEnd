@@ -37,7 +37,7 @@ export default function Register2() {
 }
 */
 const Register = () => {
- // const navigate = useNavigate();
+ const navigate = useNavigate();
 
   interface newInputsInterface {
     email: string;
@@ -133,7 +133,7 @@ const Register = () => {
               <Text>Registre-se</Text>
             </TitleContainer>
             <Description>
-              Já possui uma conta ? <Strong>Entrar</Strong>
+              Já possui uma conta ? <Strong onClick={() => navigate(RoutePath.LOGIN)}>Entrar</Strong>
             </Description>
           </TextImg>
 
