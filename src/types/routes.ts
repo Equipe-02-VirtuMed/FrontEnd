@@ -4,4 +4,5 @@ export enum RoutePath {
     REGISTER = '/register',
     USER = '/user',
     CALL = '/call/:id',
+    CREATE_SCHEDULE = '/criar-consulta'
   }

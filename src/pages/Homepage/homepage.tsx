@@ -7,6 +7,11 @@ import { colors } from "../../styles/colors";
 import Carousel from "react-elastic-carousel";
 import MedicosCarousel from "./components/medicosCarousel/medicos_carousel";
 import CategoriasCarousel from "./components/categoriasCarousel/categorias_carousel";
+import { useUser } from "../../context/UserContext";
+import { LocalStorageHelper } from "../../helpers/LocalStorageHelper";
+import { LocalStorageKeys } from "../../types/LocalStorageKeys";
+import { useEffect } from "react";
+import NavbarComponent from "../../components/navbar";
 
 const transition = {
   hidden: { opacity: 0 },
@@ -17,22 +22,30 @@ const transition = {
 
 const Homepage = () => {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 820px)" });
+  const {user,getSchedule} = useUser()
+
+  useEffect(() => {
+    getSchedule(user.email,user.role)
+  },[])
+
 
   if (isTabletOrMobile) {
     return (
       <>
         <motion.div variants={transition} initial="hidden" animate="show">
           <Container>
-            <Navbar>
-              <Img src="https://i.insider.com/5899ffcf6e09a897008b5c04?width=1000&format=jpeg&auto=webp" />
-              <Name>Pedro Alonso Feitosa</Name>
-            </Navbar>
+          <NavbarComponent/>
             <SecondContainer>
-              <TextIntro>Olá {"Pedro"}, que bom te ver por aqui...😊</TextIntro>
-              <Button href="/user">Perfil</Button>
-              <Button href="/consulta">Consultas</Button>
-              <Button>Medicos</Button>
+              <TextIntro>Olá {user.name}, que bom te ver por aqui...😊</TextIntro>
+              <Button href="/criar-consulta">Criar consulta</Button>
             </SecondContainer>
+            <TopicContainer>
+              <TextIntro style={{ fontWeight: 700 }}>Minhas consultas</TextIntro>
+              <SeeMore>
+                <TopicText>ver mais</TopicText>
+              </SeeMore>
+            </TopicContainer>
+            <CategoriasCarousel />
             <TopicContainer>
               <TextIntro style={{ fontWeight: 700 }}>Médicos</TextIntro>
               <SeeMore>
@@ -40,13 +53,6 @@ const Homepage = () => {
               </SeeMore>
             </TopicContainer>
             <MedicosCarousel />
-            <TopicContainer>
-              <TextIntro style={{ fontWeight: 700 }}>Categorias</TextIntro>
-              <SeeMore>
-                <TopicText>ver mais</TopicText>
-              </SeeMore>
-            </TopicContainer>
-            <CategoriasCarousel />
           </Container>
         </motion.div>
       </>
@@ -115,7 +121,7 @@ const SecondContainer = styled.div`
   padding: 30px 25px 10px 25px;
 `;
 
-const TextIntro = styled.div``;
+const TextIntro = styled.div`width: 100%;`;
 
 const BtnContainer = styled.div`
   display: flex;
@@ -126,7 +132,7 @@ const Button = styled.a`
   color: ${colors.primaryWhite};
   font-weight: 500;
   font-size: 14px;
-  padding: 0.25rem 0;
+  padding: 0.5rem 0;
   border-radius: 10px;
   display: flex;
   justify-content: center;

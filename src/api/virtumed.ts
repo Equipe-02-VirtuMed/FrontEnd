@@ -46,5 +46,20 @@ api.interceptors.request.use((config: any) => {
     const response = await api.post('/auth/sign-in-user', data)
     return response
   }
+
+  export const getSchedules = async (email:any,typeUser:string): Promise<any> => {
+    if(typeUser === 'Doctor'){
+      const doctor = await api.get('/schedule/doctor', email)
+      return doctor
+    }else{
+      const pacient = await api.get('/schedule/pacient', email)
+      return pacient
+    }
+  }
+
+  export const postSchedule = async (data: any): Promise<any> => {
+    const response = await api.post('/create-schedule', data)
+    return response
+  }
   
   export default api;

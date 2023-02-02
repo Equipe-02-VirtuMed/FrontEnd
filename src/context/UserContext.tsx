@@ -1,5 +1,5 @@
 import React, { useContext, useState, createContext, useEffect } from 'react'
-import { CreateUser, login, Login, register } from '../api/virtumed'
+import { CreateUser, getSchedules, login, Login, postSchedule, register } from '../api/virtumed'
 import { LocalStorageHelper } from '../helpers/LocalStorageHelper';
 import { LocalStorageKeys } from '../types/LocalStorageKeys';
 import { RoutePath } from '../types/routes'
@@ -8,19 +8,45 @@ interface ContextProps {
   registerUser: (modelData: CreateUser) => void
   loginUser:(modelData: Login) => void
   onChangeNewUser:(propname:string,e:any) => void
+  onChangeNewSchedule:(propname:string,e:any) => void
+  getSchedule:(email:string,typeUser:string) => void
+  newSchedule:(data:any) => void
+  createSchedule: any
   newUser: any
+  user:any
 }
 
 interface UserProps {
     children?: React.ReactNode;
-  }
+}
+
+interface CreateSchedule{
+  day: string
+  doctoremail: string
+  pacientemail: string 
+  residency: string
+}
   
   const inputRegister = {} as CreateUser
+
+  const inputSchedule = {} as CreateSchedule
 
 export const UserContext = createContext<ContextProps>({} as ContextProps)
 
 export const UserProvider: React.FC<UserProps> = ({ children }) => {
     const [newUser, setNewUser] = useState<any[]>([inputRegister])
+    const [createSchedule, setNewSchedule] = useState<CreateSchedule[]>([inputSchedule])
+    const [user,setUser] = useState(LocalStorageHelper.get(LocalStorageKeys.USER))
+
+    const onChangeNewSchedule = (
+      propName: string,
+      e: any
+    ) => {
+      const arr = [...newUser]
+      const item = arr[0]
+      item[propName] = e
+      setNewSchedule(arr)
+    }
 
     const onChangeNewUser = (
         propName: string,
@@ -48,8 +74,10 @@ export const UserProvider: React.FC<UserProps> = ({ children }) => {
 
     async function loginUser(modelData: Login): Promise<any> {
         try {
-          const result = await login(modelData).then((res) => {return res})
-          console.log(result)
+          const result = await login(modelData).then((res) => {
+            setUser(res.data.user)
+            return res})
+            console.log(result.data.user)
           LocalStorageHelper.set(LocalStorageKeys.USER,result.data.user)
           LocalStorageHelper.set(LocalStorageKeys.TOKEN,result.data.token)
           setTimeout(() => window.location.href = RoutePath.HOME,500)
@@ -59,11 +87,43 @@ export const UserProvider: React.FC<UserProps> = ({ children }) => {
         }
     }
 
+    async function getSchedule(email:string,typeUser:string): Promise<any> {
+      console.log({doctoremail:email},typeUser)
+      try {
+        const result = await getSchedules({doctoremail:email},typeUser).then((res) => {
+          setUser(res.data.user)
+          return res})
+          console.log(result.data.user)
+        LocalStorageHelper.set(LocalStorageKeys.USER,result.data.user)
+        LocalStorageHelper.set(LocalStorageKeys.TOKEN,result.data.token)
+        setTimeout(() => window.location.href = RoutePath.HOME,500)
+        return result;
+      } catch (err) {
+        console.error(err)
+      }
+  }
+
+  async function newSchedule(data:any): Promise<any> {
+    try {
+      const result = await postSchedule(data).then((res) => {return res})
+        console.log(result.data.user)
+      setTimeout(() => window.location.href = RoutePath.HOME,500)
+      return result;
+    } catch (err) {
+      console.error(err)
+    }
+}
+
   return (
     <UserContext.Provider
       value={{
+        newSchedule,
+        createSchedule,
+        getSchedule,
+        user,
         newUser,
         onChangeNewUser,
+        onChangeNewSchedule,
         registerUser,
         loginUser
       }}
