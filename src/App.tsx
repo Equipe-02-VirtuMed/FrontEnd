@@ -1,10 +1,13 @@
-import "./App.css";
-import { Join } from "./components/CreateButton";
-
-const WS = "http://localhost:8080";
+import { BrowserRouter } from 'react-router-dom'
+import Router from './router'
 
 function App() {
-  return <body className="bg-sky-100"></body>;
+
+  return (
+    <BrowserRouter>
+      <Router />
+  </BrowserRouter>
+  )
 }
 
-export default App;
+export default App

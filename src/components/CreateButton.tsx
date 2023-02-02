@@ -7,7 +7,7 @@ export const Join: React.FC = () => {
     ws.emit("create-room");
   };
   return (
-    <button onClick={createRoom} className="bg-blue-900 py-2 px-4 rounded-lg text-xl hover:bg-cyan-400 text-teal-200 hover:text-sky-900">
+    <button onClick={createRoom}>
       Iniciar vídeo chamada
     </button>
   );
