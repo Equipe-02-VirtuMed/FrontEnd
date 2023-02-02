@@ -14,26 +14,23 @@ const AuthenticatedRoutes = () => {
   return isAuthenticated ? <Outlet /> : <Navigate to={RoutePath.LOGIN} />;
 };
 
+const NotAuthenticatedRoutes = () => {
+  const isAuthenticated = Auth.isAuth();
+  console.log(isAuthenticated)
+  return isAuthenticated ? <Outlet /> : <Navigate to={RoutePath.HOME} />;
+};
+
 
 const Router = () => {
   return (
     <Routes>
       <Route path={RoutePath.LOGIN} element={<Login />} />
       <Route path={RoutePath.REGISTER} element={<Register />} />
-
-
-      {/* Add this routes inside the authenticatedRoutes after finish */}
+      <Route path="/" element={<AuthenticatedRoutes />}>
       <Route path={RoutePath.HOME} element={<Homepage />} />
       <Route path={RoutePath.CALL} element={<Call />} />
       <Route path={RoutePath.USER} element={<EditUser />} />
-
-
-      <Route path="/" element={<AuthenticatedRoutes />}>
-
       </Route>
-    
-   
-     
     </Routes>
   );
 };

@@ -20,48 +20,17 @@ import { LoginResponse } from "../../types/api-types/login";
 import { ErrorResponse } from "../../types/api-types/error";
 import { User } from "../../types/api-types/user";
 import { createUser } from "../../helpers/endpoint/user";
+import { useUser } from "../../context/UserContext";
+import { options } from "./static";
 
 const mobile: string = "600px";
 const desktop: string = "1024px";
 const tablet: string = "825px";
-/*
-const queryClient = new QueryClient()
 
-
-export default function Register2() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Register />
-    </QueryClientProvider>
-  )
-}
-*/
 const Register = () => {
  const navigate = useNavigate();
-
-  interface newInputsInterface {
-    email: string;
-    name: string;
-    password: string;
-    confirmPassword: string;
-    image: string;
-  }
-
-  const input1 = {} as newInputsInterface
-
-  const [newInputs, setNewInputs] = useState<newInputsInterface[]>([input1])
-
-  const onChangeInput = (
-    state: any,
-    setState: any,
-    propName: string,
-    e: any,
-  ) => {
-    const arr = [...state]
-    const item = arr[0]
-    item[propName] = e
-    setState(arr)
-  }
+ const {onChangeNewUser, newUser,registerUser} = useUser()
+ const [isDoctor,setTypeDoctor] = useState<boolean>(true)
 
   const transition = {
     hidden: { opacity: 0 },
@@ -80,46 +49,21 @@ const Register = () => {
       }
     };
 
-  async function create() {
-    console.log(newInputs[0])
-    try {
-      const res = await createUser(newInputs[0]).then((res) => {
-        console.log(res)
-      })
-    } catch (err: any) {
-      console.log(err)
+    function Submit(){
+      onChangeNewUser('image','')
+      if(isDoctor){
+        onChangeNewUser('crm','')
+        onChangeNewUser('residency','')
+        onChangeNewUser('role','Pacient')
+        console.log(newUser[0])
+        registerUser(newUser[0])
+      }else{
+        console.log(newUser[0])
+        onChangeNewUser('role','Doctor')
+        registerUser(newUser[0])
+      }
     }
-    // setTimeout(() => Submit(),1000 * 2)
-  }
-  /*
-    const mutation = useMutation(AuthService.login, {
-      onSuccess: (data: LoginResponse & ErrorResponse) => {
-        if (data.statusCode) {
-          setErrorMessage(data.message);
-          return;
-        }
-        if (data.token && data.user) {
-          LocalStorageHelper.set<string>(LocalStorageKeys.TOKEN, data.token);
-          LocalStorageHelper.set<User>(LocalStorageKeys.USER, data.user);
-          navigate(RoutePath.HOME);
-        }
-        setErrorMessage("Tente novamente!");
-      },
-  
-      onError: () => {
-        setErrorMessage("Ocorreu um erro durante a requisição");
-      },
-    });
-  
-    function Submit() {
-      const data = {
-        email: newInputs[0].email,
-        password: newInputs[0].password,
-      };
-      mutation.mutate(data);
-      setErrorMessage("");
-    }
-    */
+
 
   return (
     <Container>
@@ -136,12 +80,29 @@ const Register = () => {
               Já possui uma conta ? <Strong onClick={() => navigate(RoutePath.LOGIN)}>Entrar</Strong>
             </Description>
           </TextImg>
-
+            
           <InputGrid>
+    
+          <Toogle>
+            {options.map((item) => 
+            <Item onClick={() => {isDoctor !== item.value ? setTypeDoctor(!isDoctor) : null}} isDoctorType={isDoctor === item.value}>{item.label}</Item>
+            )}
+          </Toogle>
+       
           <InputContainer>
               <Input
                 id={"id1"}
+                onChange={(e) => onChangeNewUser('name',e.target.value)}
                 placeholder="Nome"
+                type="text"
+                autoComplete="off"
+              />
+            </InputContainer>
+            <InputContainer>
+              <Input
+                id={"id1"}
+                onChange={(e) => onChangeNewUser('uf',e.target.value)}
+                placeholder="UF"
                 type="text"
                 autoComplete="off"
               />
@@ -153,10 +114,25 @@ const Register = () => {
                 type="text"
                 autoComplete="off"
                 onChange={(e) =>
-                  onChangeInput(
-                    newInputs,
-                    setNewInputs,
+                  onChangeNewUser(
                     'email',
+                    e.target.value
+                  )
+                }
+              />
+            </InputContainer>
+            {isDoctor ? 
+            null :
+             <>
+             <InputContainer>
+              <Input
+                id={"id1"}
+                placeholder="Insira seu CRM"
+                type="text"
+                autoComplete="off"
+                onChange={(e) =>
+                  onChangeNewUser(
+                    'crm',
                     e.target.value
                   )
                 }
@@ -164,14 +140,28 @@ const Register = () => {
             </InputContainer>
             <InputContainer>
               <Input
+                id={"id1"}
+                placeholder="Insira sua residencia"
+                type="text"
+                autoComplete="off"
+                onChange={(e) =>
+                  onChangeNewUser(
+                    'residency',
+                    e.target.value
+                  )
+                }
+              />
+            </InputContainer>
+             </>
+            } 
+            <InputContainer>
+              <Input
                 id={"id2"}
                 placeholder="Insira sua senha"
                 type="password"
                 autoComplete="off"
                 onChange={(e) =>
-                  onChangeInput(
-                    newInputs,
-                    setNewInputs,
+                  onChangeNewUser(
                     'password',
                     e.target.value
                   )
@@ -185,36 +175,14 @@ const Register = () => {
                 type="password"
                 autoComplete="off"
                 onChange={(e) =>
-                  onChangeInput(
-                    newInputs,
-                    setNewInputs,
+                  onChangeNewUser(
                     'confirmPassword',
                     e.target.value
                   )
                 }
               />
             </InputContainer>
-            <InputContainer>
-              <Input
-                id={"id5"}
-                placeholder="Coloque uma imagem"
-                type="file"
-                autoComplete="off"
-                onChange={(e) =>
-                  onChangeInput(
-                    newInputs,
-                    setNewInputs,
-                    'image',
-                    'https://' + e.target.value
-                  )
-                }
-              />
-              <EyeIcon
-                onClick={eyeChange}
-                src={eyeLogic ? eyeClosed  : eye}
-              ></EyeIcon>
-            </InputContainer>
-            <EnterBtn onClick={() => create()}>Criar conta</EnterBtn>
+            <EnterBtn onClick={() => Submit()}>Criar conta</EnterBtn>
           </InputGrid>
           <SocialContainer>
             Ou criar com
@@ -231,6 +199,25 @@ const Register = () => {
 };
 
 export default Register
+
+interface ComponentProps{
+  isDoctorType?:boolean
+}
+
+const Item = styled.div<ComponentProps>`
+display:flex;
+align-items:center;
+background:${(props) => (props.isDoctorType ? colors.primaryBlack : 'transparent')};
+justify-content:center;
+`
+
+const Toogle = styled.div`
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+grid-template-rows: 1fr;
+grid-column-gap: 24px;
+grid-row-gap: 0px;
+`
 
 const EyeIcon = styled.img`
   width: 26px;

@@ -9,7 +9,7 @@ import styled from "styled-components";
 import { colors } from "../../styles/colors";
 import Link, { useState ,useRef} from "react";
 import Image from "react";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider, useMutation } from "@tanstack/react-query";
 import { AuthService } from "../../services/AuthServices";
 import { LoginResponse } from "../../types/api-types/login";
@@ -18,6 +18,7 @@ import { LocalStorageHelper } from "../../helpers/LocalStorageHelper";
 import { LocalStorageKeys } from "../../types/LocalStorageKeys";
 import { RoutePath } from "../../types/routes";
 import { User } from "../../types/api-types/user";
+import { useUser } from "../../context/UserContext";
 
 const mobile: string = "600px";
 const desktop: string = "1024px";
@@ -38,36 +39,20 @@ const MainLogin = () => {
   const navigate = useNavigate();
   const email = useRef("");
   const password = useRef("");
-
-  const mutation = useMutation(AuthService.login, {
-    onSuccess: (data: LoginResponse & ErrorResponse) => {
-      if (data.statusCode) {
-        setErrorMessage(data.message);
-        return;
-      }
-      if (data.token && data.user) {
-        LocalStorageHelper.set<string>(LocalStorageKeys.TOKEN, data.token);
-        LocalStorageHelper.set<User>(LocalStorageKeys.USER, data.user);
-        navigate(RoutePath.HOME);
-      }
-      setErrorMessage("Tente novamente!");
-    },
-
-    onError: () => {
-      setErrorMessage("Ocorreu um erro durante a requisição");
-    },
-  });
+  const { loginUser } = useUser()
 
   function Submit() {
     const data = {
       email: email.current,
       password: password.current,
     };
-    console.log(data);
+    loginUser(data)
+    var input_1 = (document.getElementById('id1') as HTMLInputElement)
+    var input_2 = (document.getElementById('id2') as HTMLInputElement)
+    input_1.value = ''
+    input_2.value = ''
     email.current = "";
     password.current = "";
-    mutation.mutate(data);
-    setErrorMessage("");
   }
 
   const transition = {
