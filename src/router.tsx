@@ -31,9 +31,7 @@ const Router = () => {
         <Route path={RoutePath.HOME} element={<Homepage />} />
         <Route path={RoutePath.CALL} element={<Call />} />
         <Route path={RoutePath.USER} element={<EditUser />} />
-          <Route path="/" element={<OnlyDoctor />}>
             <Route path={RoutePath.CREATE_SCHEDULE} element={<CriarConsulta/>} />
-          </Route>
         </Route>
     </Routes>
   );

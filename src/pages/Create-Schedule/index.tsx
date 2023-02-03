@@ -36,8 +36,7 @@ const CriarConsulta = () => {
       onChangeNewSchedule('day', hours.slice(0,hours.length - 3))
       onChangeNewSchedule('doctoremail',user.email)
       onChangeNewSchedule('residency',user.residency)
-      console.log(createSchedule[0])
-      // newSchedule(createSchedule[0])
+      newSchedule(createSchedule[0])
     }
     
     if (isTabletOrMobile) {

@@ -13,7 +13,7 @@ export const Auth = {
     },
     token: (): any => {
         const token = LocalStorageHelper.get(LocalStorageKeys.TOKEN)
-        return token
+        return token 
     },
     isAuth: (): boolean => {
         const token = LocalStorageHelper.get(LocalStorageKeys.TOKEN)

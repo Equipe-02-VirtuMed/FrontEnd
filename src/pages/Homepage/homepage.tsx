@@ -22,10 +22,10 @@ const transition = {
 
 const Homepage = () => {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 820px)" });
-  const {user,getSchedule} = useUser()
+  const {user,getSchedule,schedules} = useUser()
 
   useEffect(() => {
-    getSchedule(user.email,user.role)
+   getSchedule(user.email,user.role)
   },[])
 
 

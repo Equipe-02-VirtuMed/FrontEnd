@@ -14,6 +14,7 @@ interface ContextProps {
   createSchedule: any
   newUser: any
   user:any
+  schedules:any
 }
 
 interface UserProps {
@@ -37,6 +38,7 @@ export const UserProvider: React.FC<UserProps> = ({ children }) => {
     const [newUser, setNewUser] = useState<any[]>([inputRegister])
     const [createSchedule, setNewSchedule] = useState<CreateSchedule[]>([inputSchedule])
     const [user,setUser] = useState(LocalStorageHelper.get(LocalStorageKeys.USER))
+    const [schedules,setSchedules] = useState()
 
     const onChangeNewSchedule = (
       propName: string,
@@ -77,10 +79,9 @@ export const UserProvider: React.FC<UserProps> = ({ children }) => {
           const result = await login(modelData).then((res) => {
             setUser(res.data.user)
             return res})
-            console.log(result.data.user)
           LocalStorageHelper.set(LocalStorageKeys.USER,result.data.user)
           LocalStorageHelper.set(LocalStorageKeys.TOKEN,result.data.token)
-          setTimeout(() => window.location.href = RoutePath.HOME,500)
+          window.location.href = RoutePath.HOME
           return result;
         } catch (err) {
           console.error(err)
@@ -91,12 +92,8 @@ export const UserProvider: React.FC<UserProps> = ({ children }) => {
       console.log({doctoremail:email},typeUser)
       try {
         const result = await getSchedules({doctoremail:email},typeUser).then((res) => {
-          setUser(res.data.user)
+          setSchedules(res.data)
           return res})
-          console.log(result.data.user)
-        LocalStorageHelper.set(LocalStorageKeys.USER,result.data.user)
-        LocalStorageHelper.set(LocalStorageKeys.TOKEN,result.data.token)
-        setTimeout(() => window.location.href = RoutePath.HOME,500)
         return result;
       } catch (err) {
         console.error(err)
@@ -117,6 +114,7 @@ export const UserProvider: React.FC<UserProps> = ({ children }) => {
   return (
     <UserContext.Provider
       value={{
+        schedules,
         newSchedule,
         createSchedule,
         getSchedule,

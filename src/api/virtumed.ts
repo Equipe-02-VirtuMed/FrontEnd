@@ -4,7 +4,7 @@ import { Auth } from '../helpers/Auth';
 const token = Auth.token();
 
 const api = axios.create({
-    baseURL:'http://localhost:3333',
+    baseURL: 'https://virtumed-server-1-production.up.railway.app',
     headers: {'Authorization': 'Bearer '+ token}
 })
 
