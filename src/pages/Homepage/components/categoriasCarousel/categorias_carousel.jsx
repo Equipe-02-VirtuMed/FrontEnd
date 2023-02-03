@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useUser } from "../../../../context/UserContext";
 import {colors} from '../../../../styles/colors'
 
-const CategoriasCarousel = () =>{
+function CategoriasCarousel(){
  const {schedules} = useUser()
     return(
         <Container>
