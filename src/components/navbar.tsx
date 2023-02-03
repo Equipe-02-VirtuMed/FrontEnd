@@ -1,14 +1,22 @@
 import { useUser } from "../context/UserContext";
 import styled from "styled-components";
 import { colors } from "../styles/colors";
+import { SocialIcons } from "../pages/Login";
+import logout from '../assets/logout.svg'
+import { LocalStorageHelper } from "../helpers/LocalStorageHelper";
 
 const NavbarComponent = () => {
     const {user} = useUser()
+    function Logout(){
+      LocalStorageHelper.clear()
+      window.location.href = '/login'
+    }
     return ( 
         <>
          <Navbar>
               <Img src="https://i.insider.com/5899ffcf6e09a897008b5c04?width=1000&format=jpeg&auto=webp" />
               <Name>{user.name}</Name>
+              <SocialIcons onClick={() => Logout()} src={logout} />
             </Navbar>
         </>
     )
